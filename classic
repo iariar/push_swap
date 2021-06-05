@@ -1,0 +1,20 @@
+    while (stack->topa > 1)
+    {
+        mid = find_mid(a, stack, &biggest, &smallest);
+        if (stack->indicate <= stack->sizea / 2)
+        {
+            while(ft_atoi((*a)->content) > smallest)
+                rotate_a(a, stack);
+        }
+        else if (stack->indicate > stack->sizea / 2)
+        {
+            while(ft_atoi((*a)->content) > smallest)
+                reverse_rotate_a(a, stack);
+        }
+        push_b(a, b, stack);
+        // printf("been here %d\n", stack->topa);
+    }
+    while(stack->topb >= 0)
+    {
+        push_a(a, b, stack);
+    }
