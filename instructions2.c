@@ -6,7 +6,7 @@
 /*   By: iariss <iariss@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/05 15:05:45 by iariss            #+#    #+#             */
-/*   Updated: 2021/06/05 15:56:50 by iariss           ###   ########.fr       */
+/*   Updated: 2021/06/06 18:04:44 by iariss           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,4 +61,16 @@ void	switch_tops(t_list **a, t_list **b, t_stack *stack)
 	push_b(a, b, stack);
 	sb_swapb(b, stack);
 	push_a(a, b, stack);
+}
+
+t_list	*find_before_last(t_list **head, t_list *last)
+{
+	t_list	*replica;
+
+	replica = *head;
+	while (replica->next != last)
+	{
+		replica = replica->next;
+	}
+	return (replica);
 }

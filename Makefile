@@ -6,7 +6,7 @@
 #    By: iariss <iariss@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/14 11:44:36 by iariss            #+#    #+#              #
-#    Updated: 2021/06/05 18:34:29 by iariss           ###   ########.fr        #
+#    Updated: 2021/06/07 19:07:56 by iariss           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,8 +15,9 @@ EXEC    = push_swap
 CC      = gcc
 CFLAGS  = -Wall -Werror -Wextra
 LIBFT = libft/libft.a
+HEADER = file.h
 
-SRC = main.c initialize.c instructions.c instructions2.c print_ex.c extra.c operate.c
+SRC = main.c initialize.c instructions.c instructions2.c print_ex.c extra.c operate.c extra2.c cases.c
 	
 OBJ = $(SRC:.c=.o)
 
@@ -24,23 +25,21 @@ OBJ = $(SRC:.c=.o)
 all : $(LIBFT) $(NAME)
 
 $(LIBFT):
-	make -C libft
-	make bonus -C libft
+	make -C ./libft
+	make bonus -C ./libft
 
-$(NAME): $(OBJ)
+$(NAME): $(HEADER) $(OBJ) 
 
-	ar rcs $(NAME) $(OBJ) libft/*.o
-	$(CC) $(CFLAGS) $(SRC) $(NAME) -o $(EXEC)
+	ar rcs $(NAME) $(OBJ)
+	$(CC) $(CFLAGS) $(SRC) $(NAME) $(LIBFT) -o $(EXEC) 
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJ)
-	make clean -C libft
+	rm -f $(OBJ) $(NAME)
+	make fclean -C libft
 
 fclean: clean
-	rm -f $(NAME)
+	rm -f $(EXEC)
 	make fclean -C libft
 
 re: fclean all

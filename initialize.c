@@ -6,53 +6,53 @@
 /*   By: iariss <iariss@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/05 14:48:22 by iariss            #+#    #+#             */
-/*   Updated: 2021/06/05 17:30:53 by iariss           ###   ########.fr       */
+/*   Updated: 2021/06/07 08:56:39 by iariss           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "file.h"
 
-t_list	*initialize_a(int c, t_list *a, t_list *yo, char **v, t_stack *stack)
+void	fill_list(t_list **a, t_list **yo, t_add *add)
 {
-	int		k;
-	int		i;
-	char	**seb;
-	int		s;
-	int		count;
-
-	s = 0;
-	i = 0;
-	k = 1;
-	count = 0;
-	while (k <= c - 1)
+	add->i = 0;
+	while (add->seb[add->i])
 	{
-		seb = ft_split(v[k], ' ');
-		i = 0;
-		while (seb[i])
+		if (!add->s)
 		{
-			if (!s)
-			{
-				check_arg(seb[i], &a);
-				yo = ft_lstnew(seb[i]);
-				a = yo;
-				s = 1;
-				count++;
-			}
-			else
-			{
-				check_arg(seb[i], &a);
-				yo->next = ft_lstnew(seb[i]);
-				yo = yo->next;
-				count++;
-			}
-			i++;
+			check_arg(add->seb[add->i], a);
+			*yo = ft_lstnew(add->seb[add->i]);
+			*a = *yo;
+			add->s = 1;
 		}
-		free(seb);
-		k++;
+		else
+		{
+			check_arg(add->seb[add->i], a);
+			(*yo)->next = ft_lstnew(add->seb[add->i]);
+			*yo = (*yo)->next;
+		}
+		add->count++;
+		add->i++;
 	}
-	stack->topa = count;
-	stack->sizeb = count;
-	stack->sizea = count;
+}
+
+t_list	*initialize_a(int c, t_list *a, char **v, t_stack *stack)
+{
+	t_add	add;
+
+	add.s = 0;
+	add.k = 1;
+	add.count = 0;
+	initialize_vars(stack, c);
+	while (add.k <= c - 1)
+	{
+		add.seb = ft_split(v[add.k], ' ');
+		fill_list(&a, &stack->yo, &add);
+		free(add.seb);
+		add.k++;
+	}
+	stack->topa = add.count;
+	stack->sizeb = add.count;
+	stack->sizea = add.count;
 	return (a);
 }
 

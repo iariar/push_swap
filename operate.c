@@ -6,10 +6,9 @@
 /*   By: iariss <iariss@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/05 18:30:15 by iariss            #+#    #+#             */
-/*   Updated: 2021/06/05 18:40:25 by iariss           ###   ########.fr       */
+/*   Updated: 2021/06/07 18:14:36 by iariss           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "file.h"
 
@@ -18,9 +17,18 @@ char	**operate(t_list **a, t_list **b, t_stack *stack)
 	t_vars	vars;
 
 	initialise_vars(stack, &vars);
-	switch_by_mid(&vars, stack, a, b);
-	rest_sorted(&vars, stack, a, b);
-	to_a(&vars, stack, a, b);
+	if (stack->sizea >= 10 && stack->sizea <= 250)
+	{
+		switch_by_mid(&vars, stack, a, b);
+		rest_sorted(&vars, stack, a, b);
+		to_a(&vars, stack, a, b);
+	}
+	else if (stack->sizea > 250)
+		two_fifty(&vars, stack, a, b);
+	else if (stack->sizea < 10 && stack->sizea >= 4)
+		ten(&vars, stack, a, b);
+	else
+		four(a, stack);
 	return (stack->tab);
 }
 
@@ -41,9 +49,7 @@ void	switch_by_mid(t_vars *vars, t_stack *stack, t_list **a, t_list **b)
 				vars->bcl--;
 			}
 			else
-			{
 				rotate_a(a, stack);
-			}
 		}
 		free(stack->back1);
 		free(stack->back2);
@@ -53,16 +59,15 @@ void	switch_by_mid(t_vars *vars, t_stack *stack, t_list **a, t_list **b)
 
 char	**find_biggest(t_list **list, t_stack *stack, int *b, char **tab)
 {
-	t_list	*replica;
 	int		i;
 	char	*biggest;
 
-	replica = *list;
+	stack->replica2 = *list;
 	i = 0;
-	while (replica)
+	while (stack->replica2)
 	{
-		tab[i] = replica->content;
-		replica = replica->next;
+		tab[i] = stack->replica2->content;
+		stack->replica2 = stack->replica2->next;
 		i++;
 	}
 	tab[i] = NULL;
@@ -81,28 +86,42 @@ char	**find_biggest(t_list **list, t_stack *stack, int *b, char **tab)
 	return (tab);
 }
 
+void	duplicate(char ***all, int top, t_stack *stack)
+{
+	int	i;
+
+	i = 0;
+	*all = (char **)malloc(sizeof(char *) * (top + 1));
+	while (stack->replica)
+	{
+		(*all)[i] = stack->replica->content;
+		stack->replica = stack->replica->next;
+		i++;
+	}
+	(*all)[i] = NULL;
+}
+
 int	check_order(t_list **list, t_stack *stack, int top)
 {
 	char	**all;
 	int		i;
+	int		j;
 
+	j = 0;
 	stack->replica = *list;
+	duplicate(&all, top, stack);
 	i = 0;
-	all = (char **)malloc(sizeof(char *) * (top + 1));
-	while (stack->replica)
+	while (all[i])
 	{
-		all[i] = stack->replica->content;
-		stack->replica = stack->replica->next;
-		i++;
-	}
-	all[i] = NULL;
-	i = 0;
-	while (all[i] && i < stack->sizea)
-	{
-		if (all[i + 1] && ft_atoi(all[i]) < ft_atoi(all[i + 1]))
+		j = i + 1;
+		while (all[j])
 		{
-			free(all);
-			return (0);
+			if (ft_atoi(all[i]) > ft_atoi(all[j]))
+			{
+				free(all);
+				return (0);
+			}
+			j++;
 		}
 		i++;
 	}

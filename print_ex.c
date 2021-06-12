@@ -6,7 +6,7 @@
 /*   By: iariss <iariss@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/05 15:11:17 by iariss            #+#    #+#             */
-/*   Updated: 2021/06/05 15:59:40 by iariss           ###   ########.fr       */
+/*   Updated: 2021/06/06 18:19:47 by iariss           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ void	free_list(t_list **list)
 		free(*list);
 		*list = next;
 	}
+	exit(0);
 }
 
 void	ft_string_put(char *s)
